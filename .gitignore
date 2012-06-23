@@ -1,0 +1,5 @@
+
+*.suo
+/LazyCow/bin
+/LazyCow/obj
+/_ReSharper.LazyCow
