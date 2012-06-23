@@ -14,11 +14,13 @@ namespace LazyCow
 {
     class Program : Form
     {
-        private static NotifyIcon _notico;
         public static Service Service;
+
+        private static NotifyIcon _notico;
         private static ContextMenu _cm;
         private static System.Timers.Timer _reloadTimer;
         private static List<MenuItem> _reloadSettings;
+        private static Dictionary<string, List<MenuItem>> _menuitems;
 
         private static string _lastTrayText;
 
@@ -41,10 +43,12 @@ namespace LazyCow
             _notico = new NotifyIcon
                           {
                               Icon = Icon.FromHandle(LazyCow.Properties.Resources.traybg.GetHicon()),
-                              Text = Resources.App_Title,
+                              Text = string.Empty,
                               Visible = true,
                               ContextMenu = _cm
                           };
+
+            SetLastSyncTooltip(null);
 
             _notico.DoubleClick += new EventHandler(NotifyIconDoubleClick);
 
@@ -62,8 +66,13 @@ namespace LazyCow
         {
             if (e is DueEventArgs)
             {
-                Balloon((e as DueEventArgs).t.Name + " - " + (e as DueEventArgs).t.Due, true);
+                Balloon((e as DueEventArgs).T.Name + " - " + (e as DueEventArgs).T.Due, true);
             }
+        }
+
+        private static void SetLastSyncTooltip(DateTime? time)
+        {
+            _notico.Text = (time == null) ? Resources.App_Title + " (" + Resources.last_sync + "never)" : Resources.App_Title + " (" + Resources.last_sync + String.Format("{0:HH:mm}", time) + ")";
         }
 
         private static void Balloon(string text, bool playSound=false)
@@ -181,7 +190,7 @@ namespace LazyCow
             _notico.Icon = Icon.FromHandle(icon.GetHicon());
         }
 
-        private static void DrawContaxtMenuWithLoading()
+        private static void DrawContextMenuWithLoading()
         {
             _cm = GetLoadingMenu();
             _notico.ContextMenu = _cm;
@@ -192,6 +201,11 @@ namespace LazyCow
 
         private static void DrawContextMenu()
         {
+            if(_menuitems == null)
+                _menuitems = new Dictionary<string, List<MenuItem>>();
+            else
+                _menuitems.Clear();
+
             var menu = new ContextMenu();
 
             menu = AddTodayItems(menu);
@@ -202,6 +216,8 @@ namespace LazyCow
 
             _cm = menu;
             _notico.ContextMenu = _cm;
+
+            SetLastSyncTooltip(DateTime.Now);
         }
 
         private static ContextMenu GetLoadingMenu()
@@ -301,18 +317,15 @@ namespace LazyCow
         {
             _authed = true;
             DrawIcon();
+
+            Service.Due -= ServiceDue;
             Service.Due += new EventHandler(ServiceDue);
 
-            DrawContaxtMenuWithLoading();
+            DrawContextMenuWithLoading();
 
-            Service.RegisterHotkey(Keys.T);
+//            Service.RegisterHotkey(Keys.T);
 
             StartReloadTimer();
-        }
-
-        private static int MinToMilli(int minutes)
-        {
-            return minutes * 60000;
         }
 
         private static void StartReloadTimer()
@@ -321,7 +334,7 @@ namespace LazyCow
             _reloadTimer = new System.Timers.Timer
                                {
                                    AutoReset = false,
-                                   Interval = MinToMilli(LazyCow.Properties.Settings.Default.auto_reload_minutes)
+                                   Interval = LazyCow.Properties.Settings.Default.auto_reload_minutes * 60000
                                };
             _reloadTimer.Elapsed += new System.Timers.ElapsedEventHandler(ReloadElapsed);
             _reloadTimer.Start();
@@ -343,7 +356,7 @@ namespace LazyCow
 
         private static ContextMenu AddTaskLists(ContextMenu menu)
         {
-            int index = _cm.MenuItems.Count;
+            var index = _cm.MenuItems.Count;
 
             var item = new MenuItem {Text = "-", Index = index++};
             menu.MenuItems.Add(item);
@@ -358,7 +371,7 @@ namespace LazyCow
 
                 int i = 0;
 
-                foreach (var t in Service.Rtm.GetTasks(tl.Id, "status:incomplete").OrderBy(x => x.Priority).ThenBy(x => x.DueDateTime))
+                foreach (var t in Service.Rtm.GetTasks(tl.Id, "status:incomplete").OrderBy(x => x.Priority).ThenBy(x => x.DueDateTime).ThenBy(x => x.Name))
                 {
                     var subitem = new MenuItem {Text = t.Name};
                     if (t.DueDateTime != null)
@@ -379,7 +392,17 @@ namespace LazyCow
                     }
                     subitem.Index = i++;
                     subitem.Tag = t;
+                    subitem.Click += new EventHandler(TaskClick);
                     item.MenuItems.Add(subitem);
+
+                    if(_menuitems.ContainsKey(t.Id))
+                    {
+                        _menuitems[t.Id].Add(subitem);
+                    }
+                    else
+                    {
+                        _menuitems[t.Id] = new List<MenuItem>() { subitem };
+                    }
                 }
 
                 menu.MenuItems.Add(item);
@@ -392,8 +415,7 @@ namespace LazyCow
         {
             var index = 0;
 
-            //TODO: Tasks für heute einfügen
-            foreach (var t in Service.TasksOfToday)
+            foreach (var t in Service.TasksOfToday.OrderBy(x => x.Priority).ThenBy(x => x.DueDateTime).ThenBy(x => x.Name))
             {
                 var item = new MenuItem {Text = t.Name};
                 if (t.DueDateTime != null)
@@ -416,6 +438,15 @@ namespace LazyCow
                 item.Tag = t;
                 item.Click += new System.EventHandler(TaskClick);
                 menu.MenuItems.Add(item);
+
+                if (_menuitems.ContainsKey(t.Id))
+                {
+                    _menuitems[t.Id].Add(item);
+                }
+                else
+                {
+                    _menuitems[t.Id] = new List<MenuItem>() { item };
+                }
             }
 
             return menu;
@@ -424,7 +455,25 @@ namespace LazyCow
         //==========================================================================
         private static void TaskClick(Object sender, EventArgs e)
         {
-            //TODO: Task öffnen
+            var menuItem = sender as MenuItem;
+            if (menuItem == null) return;
+            var task = (Task)menuItem.Tag;
+
+            if (task.IsIncomplete)
+            {
+                task.Complete();
+            }
+            else
+            {
+                task.Uncomplete();
+            }
+
+            foreach(var mi in _menuitems[task.Id])
+            {
+                mi.Checked = task.IsCompleted;
+            }
+
+            DrawIcon(Service.IncompleteTasksToday.ToString(CultureInfo.InvariantCulture));
         }
 
         //==========================================================================

@@ -69,6 +69,15 @@ namespace LazyCow.Properties {
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die last sync:  ähnelt.
+        /// </summary>
+        internal static string last_sync {
+            get {
+                return ResourceManager.GetString("last_sync", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap prio0 {
             get {
                 object obj = ResourceManager.GetObject("prio0", resourceCulture);
@@ -94,6 +103,15 @@ namespace LazyCow.Properties {
             get {
                 object obj = ResourceManager.GetObject("prio3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Mark this task as done? ähnelt.
+        /// </summary>
+        internal static string question_mark_as_done {
+            get {
+                return ResourceManager.GetString("question_mark_as_done", resourceCulture);
             }
         }
         

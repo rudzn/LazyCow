@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using IronCow;
 using System.Timers;
 
@@ -11,11 +10,11 @@ namespace LazyCow
 
     class DueEventArgs : EventArgs
     {
-        public Task t;
+        public Task T;
 
         public DueEventArgs(Task t)
         {
-            this.t = t;
+            this.T = t;
         }
     }
 
@@ -28,13 +27,11 @@ namespace LazyCow
         private readonly Dictionary<Task, Timer> _dueTimers;
         private HotKey _hk;
         private SmartAddWindow _saw;
+        private List<Task> _tasksOfToday; 
 
         public List<Task> TasksOfToday
         {
-            get
-            {
-                return (from tl in Rtm.TaskLists where !tl.IsSmart from t in Rtm.GetTasks(tl.Id, "status:incomplete and (due:today or dueBefore:today)") select t).ToList();
-            }
+            get { return _tasksOfToday.ToList(); }
         }
 
         public TaskListCollection TaskLists
@@ -57,19 +54,21 @@ namespace LazyCow
         {
             get
             {
-                return this.TasksOfToday.Count;
+                return this.TasksOfToday.Count(x => x.IsIncomplete);
             }
         }
 
         public Service()
         {
             _dueTimers = new Dictionary<Task, Timer>();
-            Rtm = new Rtm("6d4e7d515e136fe1e3db21df242998ea", "9073739ea220ab96");
+            Rtm = new Rtm("6d4e7d515e136fe1e3db21df242998ea", "9073739ea220ab96")
+                      {RequestThrottling = new System.TimeSpan(0, 0, 0, 0)};
         }
 
         public void Reload()
         {
-            Rtm = new Rtm("6d4e7d515e136fe1e3db21df242998ea", "9073739ea220ab96");
+            Rtm = new Rtm("6d4e7d515e136fe1e3db21df242998ea", "9073739ea220ab96")
+                      {RequestThrottling = new System.TimeSpan(0, 0, 0, 0)};
             Auth();
         }
 
@@ -109,6 +108,7 @@ namespace LazyCow
 
                     if (Rtm.CheckLogin())
                     {
+                        _tasksOfToday = (from tl in Rtm.TaskLists where !tl.IsSmart from t in Rtm.GetTasks(tl.Id, "status:incomplete and (due:today or dueBefore:today)") select t).ToList();
                         Authed(this, new EventArgs());
                     }
                     else
@@ -132,6 +132,7 @@ namespace LazyCow
                 Rtm.AuthToken = Rtm.GetToken(_frob);
                 LazyCow.Properties.Settings.Default.RTM_token = Rtm.AuthToken;
                 LazyCow.Properties.Settings.Default.Save();
+                _tasksOfToday = (from tl in Rtm.TaskLists where !tl.IsSmart from t in Rtm.GetTasks(tl.Id, "status:incomplete and (due:today or dueBefore:today)") select t).ToList();
                 Authed(this, new EventArgs());
                 if (_authTimer != null) _authTimer.Dispose();
             }
@@ -155,20 +156,18 @@ namespace LazyCow
             foreach (var t in taskList)
             {
                 var test = from d in _dueTimers where d.Key.Id == t.Id select d;
-                if (!test.Any())
-                {
-                    var now = DateTime.Now;
-                    if (t.DueDateTime >= now)
-                    {
-                        var ti = new Timer();
-                        var ts = t.DueDateTime - now;
-                        ti.Interval = ts.Value.TotalMilliseconds;
-                        ti.AutoReset = false;
-                        ti.Elapsed += new ElapsedEventHandler(TiElapsed);
-                        _dueTimers.Add(t, ti);
-                        ti.Start();
-                    }
-                }
+                if (test.Any()) continue;
+
+                var now = DateTime.Now;
+                if (t.DueDateTime < now || !t.HasDueTime) continue;
+
+                var ti = new Timer();
+                var ts = t.DueDateTime - now;
+                ti.Interval = ts.Value.TotalMilliseconds;
+                ti.AutoReset = false;
+                ti.Elapsed += new ElapsedEventHandler(TiElapsed);
+                _dueTimers.Add(t, ti);
+                ti.Start();
             }
         }
 

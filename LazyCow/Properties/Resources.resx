@@ -142,4 +142,10 @@
   <data name="App_Title">
     <value xml:space="preserve">LazyCow</value>
   </data>
+  <data name="question_mark_as_done">
+    <value xml:space="preserve">Mark this task as done?</value>
+  </data>
+  <data name="last_sync">
+    <value xml:space="preserve">last sync: </value>
+  </data>
 </root>
