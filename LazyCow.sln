@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyCow", "LazyCow\LazyCow.csproj", "{4B4750D1-B076-4AED-A89D-CB7A9ABA07A7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B08EDD5F-DC16-4177-8CAE-828DF42DC45A}"
+	ProjectSection(SolutionItems) = preProject
+		LazyCow.vsmdi = LazyCow.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartParserTest", "SmartParserTest\SmartParserTest.csproj", "{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}"
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = LazyCow.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -23,6 +35,16 @@ Global
 		{4B4750D1-B076-4AED-A89D-CB7A9ABA07A7}.Release|Mixed Platforms.Build.0 = Release|x86
 		{4B4750D1-B076-4AED-A89D-CB7A9ABA07A7}.Release|x86.ActiveCfg = Release|x86
 		{4B4750D1-B076-4AED-A89D-CB7A9ABA07A7}.Release|x86.Build.0 = Release|x86
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F4E72946-6ADE-4751-BA07-EA4FD002CAF6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

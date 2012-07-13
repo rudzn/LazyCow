@@ -323,7 +323,7 @@ namespace LazyCow
 
             DrawContextMenuWithLoading();
 
-//            Service.RegisterHotkey(Keys.T);
+            Service.RegisterHotkey(Keys.T);
 
             StartReloadTimer();
         }

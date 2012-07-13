@@ -61,13 +61,13 @@ namespace LazyCow
         public Service()
         {
             _dueTimers = new Dictionary<Task, Timer>();
-            Rtm = new Rtm("6d4e7d515e136fe1e3db21df242998ea", "9073739ea220ab96")
+            Rtm = new Rtm(LazyCow.Properties.Settings.Default.api_key, LazyCow.Properties.Settings.Default.shared_secret)
                       {RequestThrottling = new System.TimeSpan(0, 0, 0, 0)};
         }
 
         public void Reload()
         {
-            Rtm = new Rtm("6d4e7d515e136fe1e3db21df242998ea", "9073739ea220ab96")
+            Rtm = new Rtm(LazyCow.Properties.Settings.Default.api_key, LazyCow.Properties.Settings.Default.shared_secret)
                       {RequestThrottling = new System.TimeSpan(0, 0, 0, 0)};
             Auth();
         }
@@ -177,6 +177,7 @@ namespace LazyCow
             try
             {
                 var t = _dueTimers.First(x => x.Value == (sender as Timer)).Key;
+                _dueTimers.Remove(t);
                 Due(this, new DueEventArgs(t));
             }
             catch (Exception ex)

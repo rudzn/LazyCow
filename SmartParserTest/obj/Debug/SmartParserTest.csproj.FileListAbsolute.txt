@@ -1,0 +1,9 @@
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\bin\Debug\SmartParserTest.dll
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\bin\Debug\SmartParserTest.pdb
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\bin\Debug\LazyCow.exe
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\bin\Debug\IronCow.dll
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\bin\Debug\VistaMenu.dll
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\bin\Debug\LazyCow.pdb
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\obj\Debug\SmartParserTest.dll
+C:\Users\Stephan\documents\visual studio 2010\Projects\LazyCow\SmartParserTest\obj\Debug\SmartParserTest.pdb

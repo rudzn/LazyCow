@@ -2,14 +2,17 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LazyCow.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="RTM_token" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="auto_reload" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="auto_reload_minutes" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">15</Value>
+    </Setting>
+    <Setting Name="api_key" Type="System.String" Scope="User">
+      <Value Profile="(Default)">6d4e7d515e136fe1e3db21df242998ea</Value>
+    </Setting>
+    <Setting Name="shared_secret" Type="System.String" Scope="User">
+      <Value Profile="(Default)">9073739ea220ab96</Value>
     </Setting>
   </Settings>
 </SettingsFile>
