@@ -94,8 +94,7 @@ namespace LazyCow
             {
                 _frob = Rtm.GetFrob();
                 System.Diagnostics.Process.Start(Rtm.GetAuthenticationUrl(_frob, IronCow.AuthenticationPermissions.Write));
-                _authTimer = new Timer {Interval = 1000, AutoReset = false};
-                //1000ms
+                _authTimer = new Timer {Interval = 1000, AutoReset = false};        //1000ms
                 _authTimer.Elapsed += new ElapsedEventHandler(AuthTimerElapsed);
                 _authTimer.Start();
             }

@@ -70,5 +70,17 @@ namespace LazyCow.Properties {
                 this["shared_secret"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RTM_token {
+            get {
+                return ((string)(this["RTM_token"]));
+            }
+            set {
+                this["RTM_token"] = value;
+            }
+        }
     }
 }
