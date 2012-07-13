@@ -19,6 +19,13 @@ namespace LazyCow
 
             textBox_apiKey.Text = LazyCow.Properties.Settings.Default.api_key;
             textBox_sharedSecret.Text = LazyCow.Properties.Settings.Default.shared_secret;
+
+            var root = new TreeNode("Settings");
+            var child = new TreeNode("Authentication");
+            root.Nodes.Add(child);
+
+            treeView1.Nodes.Add(root);
+            treeView1.SelectedNode = child;
         }
 
         private void button_save_Click(object sender, EventArgs e)

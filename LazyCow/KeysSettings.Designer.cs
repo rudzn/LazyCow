@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -36,9 +37,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox_sharedSecret = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.button_save = new System.Windows.Forms.Button();
             this.button_cancel = new System.Windows.Forms.Button();
+            this.button_save = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -52,12 +54,24 @@
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
+            // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel1);
             this.splitContainer1.Size = new System.Drawing.Size(482, 256);
             this.splitContainer1.SplitterDistance = 147;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(147, 256);
+            this.treeView1.TabIndex = 0;
             // 
             // tableLayoutPanel1
             // 
@@ -150,17 +164,6 @@
             this.tableLayoutPanel3.Size = new System.Drawing.Size(325, 46);
             this.tableLayoutPanel3.TabIndex = 2;
             // 
-            // button_save
-            // 
-            this.button_save.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button_save.Location = new System.Drawing.Point(10, 10);
-            this.button_save.Margin = new System.Windows.Forms.Padding(10);
-            this.button_save.Name = "button_save";
-            this.button_save.Size = new System.Drawing.Size(142, 26);
-            this.button_save.TabIndex = 1;
-            this.button_save.Text = "Save";
-            this.button_save.UseVisualStyleBackColor = true;
-            // 
             // button_cancel
             // 
             this.button_cancel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -171,6 +174,19 @@
             this.button_cancel.TabIndex = 2;
             this.button_cancel.Text = "Cancel";
             this.button_cancel.UseVisualStyleBackColor = true;
+            this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
+            // 
+            // button_save
+            // 
+            this.button_save.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_save.Location = new System.Drawing.Point(10, 10);
+            this.button_save.Margin = new System.Windows.Forms.Padding(10);
+            this.button_save.Name = "button_save";
+            this.button_save.Size = new System.Drawing.Size(142, 26);
+            this.button_save.TabIndex = 1;
+            this.button_save.Text = "Save";
+            this.button_save.UseVisualStyleBackColor = true;
+            this.button_save.Click += new System.EventHandler(this.button_save_Click);
             // 
             // KeysSettings
             // 
@@ -180,6 +196,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "KeysSettings";
             this.Text = "Settings";
+            this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
@@ -203,6 +220,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Button button_cancel;
         private System.Windows.Forms.Button button_save;
+        private System.Windows.Forms.TreeView treeView1;
 
 
     }

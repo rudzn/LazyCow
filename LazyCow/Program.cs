@@ -55,6 +55,7 @@ namespace LazyCow
             DrawIcon("...");
 
             Service = new Service();
+            Service.RegisterHotkey(Keys.T);
             Service.Authed += new EventHandler(ServiceAuthed);
             Service.AuthFailed += new EventHandler(Service_AuthFailed);
             var t = new Thread(new ThreadStart(Service.Auth));
@@ -287,7 +288,7 @@ namespace LazyCow
             subitem = new MenuItem { Text = "-", Index = 4 };
             item.MenuItems.Add(subitem);
 
-            subitem = new MenuItem { Text = "&RTM keys", Index = 5 };
+            subitem = new MenuItem { Text = "&Settings", Index = 5 };
             subitem.Click += new EventHandler(rtm_keys_settings_Click);
             item.MenuItems.Add(subitem);
 
@@ -349,8 +350,6 @@ namespace LazyCow
             Service.Due += new EventHandler(ServiceDue);
 
             DrawContextMenuWithLoading();
-
-            Service.RegisterHotkey(Keys.T);
 
             StartReloadTimer();
         }
