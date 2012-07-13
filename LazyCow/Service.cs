@@ -22,7 +22,7 @@ namespace LazyCow
     {
         public Rtm Rtm;
         private string _frob;
-        public event EventHandler Authed, Due;
+        public event EventHandler Authed, AuthFailed, Due;
         private Timer _authTimer;
         private readonly Dictionary<Task, Timer> _dueTimers;
         private HotKey _hk;
@@ -60,6 +60,13 @@ namespace LazyCow
 
         public Service()
         {
+            if (LazyCow.Properties.Settings.Default.api_key == string.Empty ||
+                LazyCow.Properties.Settings.Default.shared_secret == string.Empty)
+            {
+                AuthFailed(this, new EventArgs());
+                return;
+            }
+
             _dueTimers = new Dictionary<Task, Timer>();
             Rtm = new Rtm(LazyCow.Properties.Settings.Default.api_key, LazyCow.Properties.Settings.Default.shared_secret)
                       {RequestThrottling = new System.TimeSpan(0, 0, 0, 0)};
@@ -67,6 +74,13 @@ namespace LazyCow
 
         public void Reload()
         {
+            if (LazyCow.Properties.Settings.Default.api_key == string.Empty ||
+                LazyCow.Properties.Settings.Default.shared_secret == string.Empty)
+            {
+                AuthFailed(this, new EventArgs());
+                return;
+            }
+
             Rtm = new Rtm(LazyCow.Properties.Settings.Default.api_key, LazyCow.Properties.Settings.Default.shared_secret)
                       {RequestThrottling = new System.TimeSpan(0, 0, 0, 0)};
             Auth();

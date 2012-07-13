@@ -56,7 +56,9 @@ namespace LazyCow
 
             Service = new Service();
             Service.Authed += new EventHandler(ServiceAuthed);
-            Service.Auth();
+            Service.AuthFailed += new EventHandler(Service_AuthFailed);
+            var t = new Thread(new ThreadStart(Service.Auth));
+            t.Start();
 
             // Ohne Appplication.Run geht es nicht
             Application.Run();            
@@ -282,11 +284,36 @@ namespace LazyCow
             item.MenuItems.Add(subitem);
             _reloadSettings.Add(subitem);
 
+            subitem = new MenuItem { Text = "-", Index = 4 };
+            item.MenuItems.Add(subitem);
+
+            subitem = new MenuItem { Text = "&RTM keys", Index = 5 };
+            subitem.Click += new EventHandler(rtm_keys_settings_Click);
+            item.MenuItems.Add(subitem);
+
             item = new MenuItem {Text = "&Exit", Index = iIndex};
             item.Click += new System.EventHandler(ExitClick);
             menu.MenuItems.Add(item);
 
             return menu;
+        }
+
+        private static void ShowKeySettingsWindow()
+        {
+            var keywnd = new KeysSettings();
+            keywnd.ChangedKeys -= keywnd_ChangedKeys;
+            keywnd.ChangedKeys += new EventHandler(keywnd_ChangedKeys);
+            keywnd.Show();
+        }
+
+        static void rtm_keys_settings_Click(object sender, EventArgs e)
+        {
+            ShowKeySettingsWindow();
+        }
+
+        static void keywnd_ChangedKeys(object sender, EventArgs e)
+        {
+            Reload();
         }
 
         static void reloadChange_Click(object sender, EventArgs e)
@@ -328,6 +355,11 @@ namespace LazyCow
             StartReloadTimer();
         }
 
+        static void Service_AuthFailed(object sender, EventArgs e)
+        {
+            ShowKeySettingsWindow();
+        }
+
         private static void StartReloadTimer()
         {
             if (_reloadTimer != null) _reloadTimer.Dispose();
@@ -351,7 +383,8 @@ namespace LazyCow
         private static void Reload()
         {
             DrawIcon("...");
-            Service.Reload();
+            var t = new Thread(new ThreadStart(Service.Reload));
+            t.Start();
         }
 
         private static ContextMenu AddTaskLists(ContextMenu menu)
